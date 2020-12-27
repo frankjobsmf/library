@@ -1,8 +1,9 @@
 from django.db import models
 
+#managers
+from .managers import BookManager
 class Author(models.Model):
-    first_name = models.CharField(max_length=30, verbose_name='Nombre')
-    last_name = models.CharField(max_length=30, verbose_name='Apellido')
+    name = models.CharField(max_length=100, verbose_name='Nombre completo')
     birth_date = models.DateField(verbose_name='Fecha de nacimiento')
 
     def __str__(self):
@@ -20,7 +21,10 @@ class Book(models.Model):
     author = models.ForeignKey(Author, on_delete=models.PROTECT, verbose_name='Autor')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Categoría')
     published = models.DateField(verbose_name='Publicado', null=True, blank=True)
-    status = models.BooleanField(verbose_name='Estado', default=False, null=True, blank=True)
+    rented = models.BooleanField(verbose_name='Rentado', default=False, null=True, blank=True)
+
+    #objects
+    objects = BookManager()
 
     def __str__(self):
         return str(self.id) + ' - ' + self.title
