@@ -24,3 +24,9 @@ class BookManager(models.Manager):
         return self.filter(
             author__name__icontains = author
         )
+    
+    #buscar libros por categoria
+    def FindBookByCategory(self, category):
+        return self.filter(
+            category__name__icontains = category
+        )

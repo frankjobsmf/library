@@ -43,5 +43,12 @@ class ListBookByAuthorAPI(ListAPIView):
     serializer_class = BookSerializer
 
     def get_queryset(self):
-        author = self.request.query_params.get('author', None)
-        return Book.objects.FindBookByAuthor(author=author)
+        author_param = self.request.query_params.get('author', None)
+        return Book.objects.FindBookByAuthor(author=author_param)
+
+class ListBookByCategoryAPI(ListAPIView):
+    serializer_class = BookSerializer
+
+    def get_queryset(self):
+        category_param = self.request.query_params.get('category', None)
+        return Book.objects.FindBookByCategory(category=category_param)
