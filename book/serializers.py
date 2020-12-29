@@ -5,11 +5,14 @@ from rest_framework import serializers
 from .models import (
     Author,
     Book,
-    Category
+    Category,
+    DetailBook,
 )
 
-#serializers
+#serializer app reader
+from reader.serializers import ReaderSerializer
 
+#serializers
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
@@ -34,4 +37,17 @@ class BookSerializer(serializers.ModelSerializer):
             'category',
             'published',
             'rented'
+        )
+
+class DetailBookSerializer(serializers.ModelSerializer):
+    reader = ReaderSerializer()
+    book = BookSerializer()
+
+    class Meta:
+        model = DetailBook
+        fields = (
+            'id',
+            'reader',
+            'book',
+            'lease_date'
         )

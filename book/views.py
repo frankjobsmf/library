@@ -1,6 +1,8 @@
 #rest_framework
 from rest_framework.generics import (
-    ListAPIView
+    ListAPIView,
+    CreateAPIView,
+    GenericAPIView,
 )
 
 #serializers
@@ -54,3 +56,6 @@ class ListBookByCategoryAPI(ListAPIView):
     def get_queryset(self):
         category_param = self.request.query_params.get('category', None)
         return Book.objects.FindBookByCategory(category=category_param)
+
+class RentBookAPI(CreateAPIView):
+    """ Aqui se registrara el detalle de arriendo de algun libro o comic """ 

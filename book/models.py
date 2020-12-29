@@ -2,6 +2,10 @@ from django.db import models
 
 #managers
 from .managers import BookManager
+
+#app reader / models
+from reader.models import Reader
+
 class Author(models.Model):
     name = models.CharField(max_length=100, verbose_name='Nombre completo')
     birth_date = models.DateField(verbose_name='Fecha de nacimiento')
@@ -28,3 +32,9 @@ class Book(models.Model):
 
     def __str__(self):
         return str(self.id) + ' - ' + self.title
+
+
+class DetailBook(models.Model):
+    reader = models.ForeignKey(Reader, on_delete=models.PROTECT, verbose_name='Lector')
+    book = models.ForeignKey(Book, on_delete=models.PROTECT, verbose_name='Libro')
+    lease_date = models.DateField(verbose_name='Fecha de arriendo')
