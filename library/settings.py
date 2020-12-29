@@ -41,10 +41,17 @@ INSTALLED_APPS = [
     #rest_framework
     'rest_framework',
 
+    #knox
+    'knox',
+
     #apps
     'book.apps.BookConfig',
     'reader.apps.ReaderConfig',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

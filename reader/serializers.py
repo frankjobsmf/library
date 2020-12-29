@@ -44,14 +44,14 @@ class RegisterReaderSerializer(serializers.ModelSerializer):
 
 
 #login reader
-class LoginReaderSerializer(serializer.Serializer):
+class LoginReaderSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
-    def validate_data(self, data):
+    def validate(self, data):
         reader = authenticate(**data)
 
         if reader and reader.is_active:
-            return user
+            return reader
         raise serializers.ValidationError("Error de credenciales")
         
