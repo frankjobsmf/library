@@ -7,7 +7,7 @@ class Author(models.Model):
     birth_date = models.DateField(verbose_name='Fecha de nacimiento')
 
     def __str__(self):
-        return str(self.id) + ' - ' + self.first_name + ' ' + self.last_name
+        return str(self.id) + ' - ' + self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=20, verbose_name='Nombre categoria')
