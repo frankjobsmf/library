@@ -1,3 +1,8 @@
+#python
+from datetime import datetime
+now = datetime.now()
+
+
 #rest_framework
 from rest_framework.generics import (
     ListAPIView,
@@ -5,16 +10,21 @@ from rest_framework.generics import (
     GenericAPIView,
 )
 
+from rest_framework.response import Response
+from rest_framework import permissions
+
 #serializers
 from .serializers import (
-    BookSerializer
+    BookSerializer,
+    CreateRentBookSerializer,
 )
 
 #models
 from .models import (
     Author,
     Book,
-    Category
+    Category,
+    RentBook,
 )
 
 #views
@@ -51,11 +61,58 @@ class ListBookByAuthorAPI(ListAPIView):
 class ListBookByCategoryAPI(ListAPIView):
     serializer_class = BookSerializer
 
-
-
     def get_queryset(self):
         category_param = self.request.query_params.get('category', None)
         return Book.objects.FindBookByCategory(category=category_param)
 
-class RentBookAPI(CreateAPIView):
-    """ Aqui se registrara el detalle de arriendo de algun libro o comic """ 
+
+class CreateRentaBookAPI(CreateAPIView):
+    serializer_class = CreateRentBookSerializer
+
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def create(self, request, *args, **kwargs):
+        serializer = CreateRentBookSerializer(data=request.data)
+        #        
+        if serializer.is_valid():
+
+            books = serializer.validated_data['books']
+            print(books)
+
+            """
+            lista que se usara para iterar todos los libros
+            que recibamos por JSON
+            """
+            books_list = []
+            
+            #
+            for b in books:
+
+                #capturamos el id del json
+                book = Book.objects.get(id=b['id'])
+
+                #asigando datos al modelo RentBook, para luego crear el registro
+                rent_book = RentBook(
+                    reader=self.request.user,
+                    rented=False,
+                    date_rent=now.date(),
+                    book=book
+                )
+
+                #añadimos nuetra instancia a la lista creada anteriormente
+                books_list.append(rent_book)
+            
+            #debemos hacer uso de la lista, para generar el registro
+            RentBook.objects.bulk_create(
+                books_list
+            )
+
+            return Response({
+                "resp": "Arriendo generado correctamente!"
+            })
+        #
+        return Response({
+            "resp": "Error al generar arriendo!"
+        }) 

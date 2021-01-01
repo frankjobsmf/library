@@ -55,3 +55,7 @@ class LoginReaderSerializer(serializers.Serializer):
             return reader
         raise serializers.ValidationError("Error de credenciales")
         
+
+#id serializer
+class ReaderIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()

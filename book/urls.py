@@ -7,6 +7,7 @@ from .views import (
     ListBookByDateRangeAPI,
     ListBookByAuthorAPI,
     ListBookByCategoryAPI,
+    CreateRentaBookAPI,
 )
 
 urlpatterns = [
@@ -15,5 +16,6 @@ urlpatterns = [
     path('find-book-date', ListBookByDateRangeAPI.as_view(), name='find-book-date'),
     path('find-book-author', ListBookByAuthorAPI.as_view(), name='find-book-author'),
     path('find-book-category', ListBookByCategoryAPI.as_view(), name='find-book-category'),
+    path('rent-book', CreateRentaBookAPI.as_view(), name='rent-book'),
 ]
 

@@ -33,8 +33,10 @@ class Book(models.Model):
     def __str__(self):
         return str(self.id) + ' - ' + self.title
 
-
-class DetailBook(models.Model):
-    reader = models.ForeignKey(Reader, on_delete=models.PROTECT, verbose_name='Lector')
-    book = models.ForeignKey(Book, on_delete=models.PROTECT, verbose_name='Libro')
-    lease_date = models.DateField(verbose_name='Fecha de arriendo')
+class RentBook(models.Model):
+    date_rent = models.DateField()
+    date_return = models.DateField(blank=True, null=True)
+    reader = models.ForeignKey(Reader, on_delete=models.PROTECT)
+    book = models.ForeignKey(Book, on_delete=models.PROTECT)
+    rented = models.BooleanField(default=False)
+    

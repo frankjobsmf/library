@@ -6,11 +6,11 @@ from .models import (
     Author,
     Book,
     Category,
-    DetailBook,
+    RentBook,
 )
 
 #serializer app reader
-from reader.serializers import ReaderSerializer
+from reader.serializers import ReaderSerializer, ReaderIdSerializer
 
 #serializers
 class AuthorSerializer(serializers.ModelSerializer):
@@ -39,15 +39,12 @@ class BookSerializer(serializers.ModelSerializer):
             'rented'
         )
 
-class DetailBookSerializer(serializers.ModelSerializer):
-    reader = ReaderSerializer()
-    book = BookSerializer()
+#book id serializer
+class BookIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
 
-    class Meta:
-        model = DetailBook
-        fields = (
-            'id',
-            'reader',
-            'book',
-            'lease_date'
-        )
+#create rent book
+class CreateRentBookSerializer(serializers.Serializer):
+    #reader = ReaderIdSerializer()
+    books = BookIdSerializer(many=True)
+
