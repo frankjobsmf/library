@@ -17,6 +17,7 @@ from rest_framework import permissions
 from .serializers import (
     BookSerializer,
     CreateRentBookSerializer,
+    RentBookSerializer,
 )
 
 #models
@@ -27,7 +28,8 @@ from .models import (
     RentBook,
 )
 
-#views
+#LIST
+#######################################################################################
 class ListBooksAPI(ListAPIView): #Devuelve todos los libros
     serializer_class = BookSerializer
 
@@ -65,6 +67,12 @@ class ListBookByCategoryAPI(ListAPIView):
         category_param = self.request.query_params.get('category', None)
         return Book.objects.FindBookByCategory(category=category_param)
 
+class ListRentBookAPI(ListAPIView):
+    serializer_class = RentBookSerializer
+
+    def get_queryset(self):
+        return RentBook.objects.all()
+#######################################################################################
 
 class CreateRentaBookAPI(CreateAPIView):
     serializer_class = CreateRentBookSerializer
@@ -96,10 +104,15 @@ class CreateRentaBookAPI(CreateAPIView):
                 #asigando datos al modelo RentBook, para luego crear el registro
                 rent_book = RentBook(
                     reader=self.request.user,
-                    rented=False,
+                    rented=True,
                     date_rent=now.date(),
                     book=book
                 )
+
+                if rent_book.rented is True:
+                    print("El libro: " + book.title + ", ha sido rentado con exito!!!")
+                    book.rented = True
+                    book.save()
 
                 #añadimos nuetra instancia a la lista creada anteriormente
                 books_list.append(rent_book)

@@ -39,6 +39,22 @@ class BookSerializer(serializers.ModelSerializer):
             'rented'
         )
 
+
+class RentBookSerializer(serializers.ModelSerializer):
+    book = BookSerializer()
+    reader = ReaderSerializer()
+
+    class Meta:
+        model = RentBook
+        fields = (
+            'id',
+            'reader',
+            'book',
+            'date_rent',
+            'date_return',
+            'rented'
+        )
+
 #book id serializer
 class BookIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
