@@ -12,7 +12,7 @@ from .models import (
 #serializer app reader
 from reader.serializers import ReaderSerializer, ReaderIdSerializer
 
-#serializers
+#serializers estructura
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
@@ -55,8 +55,18 @@ class RentBookSerializer(serializers.ModelSerializer):
             'rented'
         )
 
+#serializadores tipo formulario
+###############################################################
+#author id serializer
+class AuthorIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
 #book id serializer
 class BookIdSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+#category id serializer
+class CategoryIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
 #create rent book
@@ -64,3 +74,10 @@ class CreateRentBookSerializer(serializers.Serializer):
     #reader = ReaderIdSerializer()
     books = BookIdSerializer(many=True)
 
+class CreateBookSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    description = serializers.CharField()
+    author = AuthorIdSerializer()
+    category = CategoryIdSerializer()
+    published = serializers.DateField()
+    rented = serializers.BooleanField()

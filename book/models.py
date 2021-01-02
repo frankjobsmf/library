@@ -40,3 +40,6 @@ class RentBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
     rented = models.BooleanField(default=False)
     
+    def __str__(self):
+        return self.reader.username + ' ' + str(self.date_rent)
+    

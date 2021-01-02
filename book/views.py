@@ -18,6 +18,7 @@ from .serializers import (
     BookSerializer,
     CreateRentBookSerializer,
     RentBookSerializer,
+    CreateBookSerializer,
 )
 
 #models
@@ -101,6 +102,13 @@ class CreateRentaBookAPI(CreateAPIView):
                 #capturamos el id del json
                 book = Book.objects.get(id=b['id'])
 
+                #validamos si el libro esta rentado
+                if book.rented is True:
+                    return Response({
+                        "resp": "Ups, libro no disponible!"
+                    })
+
+
                 #asigando datos al modelo RentBook, para luego crear el registro
                 rent_book = RentBook(
                     reader=self.request.user,
@@ -123,9 +131,44 @@ class CreateRentaBookAPI(CreateAPIView):
             )
 
             return Response({
-                "resp": "Arriendo generado correctamente!"
+                "resp": "Genial, se ha generado tu arriendo!"
             })
         #
         return Response({
-            "resp": "Error al generar arriendo!"
+            "resp": "No pudimos generar tu arriendo :("
         }) 
+
+"""class CreateBookAPI(CreateAPIView): #se registraran libros
+    serializer_class = CreateBookSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = CreateBookSerializer(data=request.data)
+
+        
+
+        #validamos si el serializer es valido
+        if serializer.is_valid():
+            print("#####################################")
+            autor = Author.objects.get(id=serializer.validated_data['id'])
+
+            print(autor.name)
+            print("#####################################")
+
+            print(autor)
+            Book.objects.create(
+                title=serializer.validated_data['title'],
+                description=serializer.validated_data['description'],
+                author=serializer.validated_data['author'],
+                category=serializer.validated_data['category'],
+                published=serializer.validated_data['published'],
+                rented=serializer.validated_data['rented']
+            )
+
+            return Response({
+                "resp": "Libro agregado con exito!"
+            })
+        #
+        return Response({
+            "resp": "No pudimos agregar el libro :("
+        })
+        """
