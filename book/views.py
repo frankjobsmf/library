@@ -138,23 +138,17 @@ class CreateRentaBookAPI(CreateAPIView):
             "resp": "No pudimos generar tu arriendo :("
         }) 
 
-"""class CreateBookAPI(CreateAPIView): #se registraran libros
+# EN PROCESO......................................................
+class CreateBookAPI(CreateAPIView): #se registraran libros
     serializer_class = CreateBookSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = CreateBookSerializer(data=request.data)
 
-        
 
         #validamos si el serializer es valido
         if serializer.is_valid():
-            print("#####################################")
-            autor = Author.objects.get(id=serializer.validated_data['id'])
 
-            print(autor.name)
-            print("#####################################")
-
-            print(autor)
             Book.objects.create(
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
@@ -171,4 +165,4 @@ class CreateRentaBookAPI(CreateAPIView):
         return Response({
             "resp": "No pudimos agregar el libro :("
         })
-        """
+        
