@@ -2,7 +2,8 @@
 from rest_framework.generics import (
     GenericAPIView,
     ListAPIView,
-    RetrieveAPIView
+    RetrieveAPIView,
+    UpdateAPIView,
 ) 
 
 from rest_framework.response import Response
@@ -15,7 +16,8 @@ from knox.models import AuthToken
 from .serializers import (
     ReaderSerializer,
     RegisterReaderSerializer,
-    LoginReaderSerializer
+    LoginReaderSerializer,
+    UpdateReaderSerializer,
 )
 
 #models
@@ -66,3 +68,31 @@ class ListReaderAPI(RetrieveAPIView): #listado de informacion del usuario autent
 
     def get_object(self):
         return self.request.user
+
+class UpdateReaderProfileAPI(UpdateAPIView): #Actualizar la informacion del lector
+    serializer_class = UpdateReaderSerializer
+
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def update(self, request, *args, **kwargs):
+        serializer = UpdateReaderSerializer(data=request.data)
+
+        if serializer.is_valid():
+            #le pasamos el id del usuario conectado
+            reader = Reader.objects.get(id=self.request.user.id)
+
+            reader.first_name=serializer.validated_data['first_name']
+            reader.last_name=serializer.validated_data['last_name']
+
+            #guardamos
+            reader.save()
+
+            return Response({
+                "resp": "Perfil modificado con exito :)"
+            })
+        #
+        return Response({
+            "resp": "No logramos modificar tu perfil :("
+        })

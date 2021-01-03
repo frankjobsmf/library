@@ -43,7 +43,6 @@ class RegisterReaderSerializer(serializers.ModelSerializer):
         )
         return reader
 
-
 #login reader
 class LoginReaderSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -56,7 +55,12 @@ class LoginReaderSerializer(serializers.Serializer):
             return reader
         raise serializers.ValidationError("Error de credenciales")
         
-
 #id serializer
 class ReaderIdSerializer(serializers.Serializer):
     id = serializers.IntegerField()
+
+#actualizar perfil
+class UpdateReaderSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    
