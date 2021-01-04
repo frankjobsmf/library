@@ -36,7 +36,7 @@ class BookSerializer(serializers.ModelSerializer):
             'author',
             'category',
             'published',
-            'rented'
+            'stock'
         )
 
 
@@ -81,3 +81,8 @@ class CreateBookSerializer(serializers.Serializer):
     category = CategoryIdSerializer()
     published = serializers.DateField()
     rented = serializers.BooleanField()
+
+#actualizar stock libro
+class StockBookSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    stock = serializers.IntegerField()

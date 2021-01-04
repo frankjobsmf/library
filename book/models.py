@@ -25,7 +25,8 @@ class Book(models.Model):
     author = models.ForeignKey(Author, on_delete=models.PROTECT, verbose_name='Autor')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Categoría')
     published = models.DateField(verbose_name='Publicado', null=True, blank=True)
-    rented = models.BooleanField(verbose_name='Rentado', default=False, null=True, blank=True)
+    #rented = models.BooleanField(verbose_name='Rentado', default=False, null=True, blank=True)
+    stock = models.IntegerField(verbose_name='Stock', default=0, blank=True, null=True)
 
     #objects
     objects = BookManager()

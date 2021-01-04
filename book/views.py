@@ -8,6 +8,7 @@ from rest_framework.generics import (
     ListAPIView,
     CreateAPIView,
     GenericAPIView,
+    UpdateAPIView,
 )
 
 from rest_framework.response import Response
@@ -19,6 +20,7 @@ from .serializers import (
     CreateRentBookSerializer,
     RentBookSerializer,
     CreateBookSerializer,
+    StockBookSerializer,
 )
 
 #models
@@ -115,8 +117,8 @@ class CreateRentaBookAPI(CreateAPIView):
                 #capturamos el id del json
                 book = Book.objects.get(id=b['id'])
 
-                #validamos si el libro esta rentado
-                if book.rented is True:
+                #validamos si el libro tiene stock
+                if book.stock == 0:
                     return Response({
                         "resp": "Ups, libro no disponible!"
                     })
@@ -132,7 +134,7 @@ class CreateRentaBookAPI(CreateAPIView):
 
                 if rent_book.rented is True:
                     print("El libro: " + book.title + ", ha sido rentado con exito!!!")
-                    book.rented = True
+                    book.stock = book.stock - 1
                     book.save()
 
                 #añadimos nuetra instancia a la lista creada anteriormente
@@ -196,3 +198,24 @@ class CreateBookAPI(CreateAPIView): #se registraran libros
             "resp": "No pudimos agregar el libro :("
         })
         
+#######################################################################################
+class UpdateStockBookAPI(UpdateAPIView):
+    serializer_class = StockBookSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer = StockBookSerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            book = Book.objects.get(id=serializer.validated_data['id'])
+
+            book.stock = serializer.validated_data['stock']
+            book.save()
+
+            return Response({
+                "msg": "Stock actualizado con exito!"
+            })
+        #
+        return Response({
+            "msg": "No pudimos actualizar el stock del libro :("
+        })
