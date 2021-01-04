@@ -1,7 +1,7 @@
 from django.db import models
 
 #managers
-from .managers import BookManager
+from .managers import BookManager, RentBookManager
 
 #app reader / models
 from reader.models import Reader
@@ -40,6 +40,9 @@ class RentBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
     rented = models.BooleanField(default=False)
     
+    #manager
+    objects = RentBookManager()
+
     def __str__(self):
         return self.reader.username + ' ' + str(self.date_rent)
     

@@ -30,3 +30,10 @@ class BookManager(models.Manager):
         return self.filter(
             category__name__icontains = category
         )
+
+class RentBookManager(models.Manager):
+    #buscar rentbook por reader
+    def FindRentBookByReader(self, id_reader):
+        return self.filter(
+            reader__id = id_reader
+        )

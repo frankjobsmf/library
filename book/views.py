@@ -68,11 +68,24 @@ class ListBookByCategoryAPI(ListAPIView):
         category_param = self.request.query_params.get('category', None)
         return Book.objects.FindBookByCategory(category=category_param)
 
-class ListRentBookAPI(ListAPIView):
+class ListRentBookAPI(ListAPIView): #lista todos las rentas de libros
     serializer_class = RentBookSerializer
 
     def get_queryset(self):
         return RentBook.objects.all()
+
+
+
+class ListRentBookByReaderAPI(ListAPIView): #Listar RentBook por reader
+    serializer_class = RentBookSerializer
+
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get_queryset(self):
+        return RentBook.objects.FindRentBookByReader(id_reader=self.request.user.id)
+
 #######################################################################################
 
 class CreateRentaBookAPI(CreateAPIView):
