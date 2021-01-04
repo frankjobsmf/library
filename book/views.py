@@ -138,22 +138,39 @@ class CreateRentaBookAPI(CreateAPIView):
             "resp": "No pudimos generar tu arriendo :("
         }) 
 
-# EN PROCESO......................................................
+
 class CreateBookAPI(CreateAPIView): #se registraran libros
     serializer_class = CreateBookSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = CreateBookSerializer(data=request.data)
 
-
         #validamos si el serializer es valido
         if serializer.is_valid():
 
+            #author
+            authors = serializer.validated_data['author'] #recuperamos dato del json
+            author = Author.objects.get(id=authors['id']) #le pasamos la key id para realizar busqueda
+
+            #category
+            categories = serializer.validated_data['category'] #recuperamos dato del json
+            category = Category.objects.get(id=categories['id']) #le pasamos la key id para realizar busqueda
+
+
+            #debug xD
+            print("##############################################")
+            print(author.name)
+            print("##############################################")
+
+            print("##############################################")
+            print(category.name)
+            print("##############################################")
+            
             Book.objects.create(
                 title=serializer.validated_data['title'],
                 description=serializer.validated_data['description'],
-                author=serializer.validated_data['author'],
-                category=serializer.validated_data['category'],
+                author=author,
+                category=category,
                 published=serializer.validated_data['published'],
                 rented=serializer.validated_data['rented']
             )
