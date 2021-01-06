@@ -21,6 +21,7 @@ from .serializers import (
     RentBookSerializer,
     CreateBookSerializer,
     StockBookSerializer,
+    ReturnedBookSerializer,
 )
 
 #models
@@ -88,6 +89,7 @@ class ListRentBookByReaderAPI(ListAPIView): #Listar RentBook por reader
     def get_queryset(self):
         return RentBook.objects.FindRentBookByReader(id_reader=self.request.user.id)
 
+#CREATE
 #######################################################################################
 
 class CreateRentaBookAPI(CreateAPIView):
@@ -197,7 +199,8 @@ class CreateBookAPI(CreateAPIView): #se registraran libros
         return Response({
             "resp": "No pudimos agregar el libro :("
         })
-        
+
+#UPDATE    
 #######################################################################################
 class UpdateStockBookAPI(UpdateAPIView):
     serializer_class = StockBookSerializer
@@ -219,3 +222,39 @@ class UpdateStockBookAPI(UpdateAPIView):
         return Response({
             "msg": "No pudimos actualizar el stock del libro :("
         })
+
+#devolver el libro
+class UpdateRentBookReturnedAPI(UpdateAPIView): # EN PROCESO........................................
+    serializer_class = ReturnedBookSerializer
+
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def update(self, request, *args, **kwargs):
+        serializer = ReturnedBookSerializer(data=request.data)
+
+        if serializer.is_valid():
+            
+            rentbook_get = RentBook.objects.get(id=serializer.validated_data['id'])
+            book_get = Book.objects.get(id=serializer.validated_data['book'])
+
+            print(book_get.title)
+
+            #instancia de rentbook - rentbook_get
+            rentbook_get.date_return = now.date() #fecha de devolucion
+            rentbook_get.rented = False #este libro ha sido devuelto
+            rentbook_get.save()
+
+            #instancia de book - book_get
+            book_get.stock = book_get.stock + 1 #al ser devuelto el libro le sumamos 1 al modelo book en stock
+            book_get.save()
+
+            return Response({
+                "msg": "Libro devuelto!"
+            })
+        #
+        return Response({
+            "msg": "Error al devolver el libro"
+        })
+    
