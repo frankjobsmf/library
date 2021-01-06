@@ -39,9 +39,23 @@ class BookSerializer(serializers.ModelSerializer):
             'stock'
         )
 
+class BookForRentBookSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer()
+    category = CategorySerializer()
+    
+    class Meta:
+        model = Book
+        fields = (
+            'id',
+            'title',
+            'description',
+            'author',
+            'category',
+            'published'
+        )
 
 class RentBookSerializer(serializers.ModelSerializer):
-    book = BookSerializer()
+    book = BookForRentBookSerializer()
     reader = ReaderSerializer()
 
     class Meta:
@@ -86,3 +100,9 @@ class CreateBookSerializer(serializers.Serializer):
 class StockBookSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     stock = serializers.IntegerField()
+
+
+#devolver libro
+class ReturnedBookSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    book = BookIdSerializer()
