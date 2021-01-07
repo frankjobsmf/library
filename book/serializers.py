@@ -105,4 +105,4 @@ class StockBookSerializer(serializers.Serializer):
 #devolver libro
 class ReturnedBookSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    book = BookIdSerializer()
+    book = serializers.IntegerField()
