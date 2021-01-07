@@ -10,6 +10,4 @@ class Reader(AbstractUser):
     password = models.CharField(max_length=256)
 
     def __str__(self):
-        return str(self.id) + '-' + self.username
-
-    
+        return str(self.id) + '-' + self.username    
