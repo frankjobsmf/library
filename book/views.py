@@ -224,7 +224,7 @@ class UpdateStockBookAPI(UpdateAPIView):
         })
 
 #devolver el libro
-class UpdateRentBookReturnedAPI(UpdateAPIView): # EN PROCESO........................................
+class UpdateRentBookReturnedAPI(UpdateAPIView):
     serializer_class = ReturnedBookSerializer
 
     permission_classes = [
@@ -233,6 +233,8 @@ class UpdateRentBookReturnedAPI(UpdateAPIView): # EN PROCESO....................
 
     def update(self, request, *args, **kwargs):
         serializer = ReturnedBookSerializer(data=request.data)
+
+        print(serializer)
 
         if serializer.is_valid():
             
